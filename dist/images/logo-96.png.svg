@@ -1,0 +1,25 @@
+<svg width="96" height="96" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="96" height="96" fill="#2563eb"/>
+  
+  <!-- Book emoji as icon -->
+  <text 
+    x="50%" 
+    y="58%" 
+    text-anchor="middle" 
+    dominant-baseline="middle"
+    font-size="48" 
+    fill="white"
+  >📖</text>
+  
+  <!-- Small text "Story" at bottom -->
+  <text 
+    x="50%" 
+    y="85%" 
+    text-anchor="middle" 
+    font-size="11.52" 
+    fill="white"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+  >STORY</text>
+</svg>

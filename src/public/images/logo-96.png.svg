@@ -1,0 +1,18 @@
+<svg width="96" height="96" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#2563eb;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+      </linearGradient>
+    </defs>
+    <!-- Background -->
+    <rect width="96" height="96" fill="url(#grad)"/>
+    <!-- Book icon -->
+    <rect x="19.200000000000003" y="19.200000000000003" width="57.599999999999994" height="57.599999999999994" rx="7.68" fill="white"/>
+    <rect x="19.200000000000003" y="19.200000000000003" width="8.64" height="57.599999999999994" fill="#e5e7eb"/>
+    <!-- Text lines -->
+    <rect x="33.599999999999994" y="33.599999999999994" width="28.799999999999997" height="2.88" fill="#2563eb"/>
+    <rect x="33.599999999999994" y="43.2" width="28.799999999999997" height="2.88" fill="#2563eb"/>
+    <rect x="33.599999999999994" y="52.800000000000004" width="28.799999999999997" height="2.88" fill="#2563eb"/>
+    <rect x="33.599999999999994" y="62.400000000000006" width="19.200000000000003" height="2.88" fill="#2563eb"/>
+  </svg>
