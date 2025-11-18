@@ -34,14 +34,6 @@ export default class HomePage {
               <span aria-hidden="true">📱</span> Install Aplikasi
             </button>
             
-            <div class="notification-control">
-              <label class="switch" title="Toggle notifikasi push">
-                <input type="checkbox" id="notification-toggle" aria-label="Toggle notifikasi">
-                <span class="slider"></span>
-              </label>
-              <span class="notification-label">🔔 Notifikasi</span>
-            </div>
-            
             <div id="connection-status" class="connection-status" role="status" aria-live="polite">
               <span class="status-dot"></span>
               <span id="status-text">Online</span>
@@ -335,58 +327,17 @@ export default class HomePage {
       });
     }
 
-    // Notification toggle
-    const notificationToggle = document.getElementById('notification-toggle');
-    if (notificationToggle && window.checkNotificationPermission) {
-      // Set initial state from local storage
-      const savedState = localStorage.getItem('notification-toggle-state');
-      if (savedState !== null) {
-        notificationToggle.checked = savedState === 'true';
+    // Automatically enable notifications
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        await window.subscribePush();
+        console.log('Notifications are enabled by default.');
       } else {
-        const isSubscribed = await window.isPushSubscribed?.() || (Notification.permission === 'granted');
-        notificationToggle.checked = !!isSubscribed;
+        console.warn('Notification permission was denied.');
       }
-
-      notificationToggle.addEventListener('change', async (e) => {
-        try {
-          if (e.target.checked) {
-            // Subscribe
-            const permission = await Notification.requestPermission();
-            if (permission === 'granted') {
-              const result = await window.subscribePush();
-              localStorage.setItem('notification-toggle-state', 'true'); // Persist state
-
-              // Check if notification-only mode
-              if (result?.backendData?.mode === 'notification-only') {
-                this._showNotification('Notifikasi diaktifkan (mode lokal) 🔔', 'success');
-              } else {
-                this._showNotification('Notifikasi diaktifkan! 🔔', 'success');
-              }
-            } else {
-              e.target.checked = false;
-              this._showNotification('Izin notifikasi ditolak', 'error');
-            }
-          } else {
-            // Unsubscribe
-            await window.unsubscribePush();
-            localStorage.setItem('notification-toggle-state', 'false'); // Persist state
-            this._showNotification('Notifikasi dinonaktifkan', 'info');
-          }
-        } catch (error) {
-          console.error('[PWA] Notification toggle error:', error);
-          e.target.checked = !e.target.checked;
-
-          // More specific error messages
-          let errorMessage = 'Gagal mengubah pengaturan notifikasi';
-          if (error.message.includes('login')) {
-            errorMessage = 'Silakan login terlebih dahulu';
-          } else if (error.message.includes('server')) {
-            errorMessage = 'Gagal terhubung ke server';
-          }
-
-          this._showNotification(errorMessage, 'error');
-        }
-      });
+    } catch (error) {
+      console.error('[PWA] Failed to enable notifications:', error);
     }
 
     // Connection status
