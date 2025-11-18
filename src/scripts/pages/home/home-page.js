@@ -336,8 +336,10 @@ export default class HomePage {
     const notificationToggle = document.getElementById('notification-toggle');
     if (notificationToggle && window.checkNotificationPermission) {
       // Set initial state
-      const isSubscribed = await window.isPushSubscribed?.() || false;
-      notificationToggle.checked = isSubscribed;
+      // Consider the user subscribed if either there's an active push subscription
+      // or the Notification permission is already granted (local notifications possible)
+      const isSubscribed = await window.isPushSubscribed?.() || (Notification.permission === 'granted');
+      notificationToggle.checked = !!isSubscribed;
 
       notificationToggle.addEventListener('change', async (e) => {
         try {

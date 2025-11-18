@@ -491,11 +491,12 @@ export default class AddStoryPage {
   }
 
   async _showSuccessNotification(description) {
-    // Check if push notification is enabled
-    const isPushSubscribed = localStorage.getItem('pushSubscribed') === 'true';
-    
+    // Check if push notification is enabled or if Notification permission is granted.
+    // We show a local notification if the user has granted Notification permission
+    // (even when not subscribed for backend push), to give immediate feedback.
+    const isPushSubscribed = await window.isPushSubscribed?.() || (Notification.permission === 'granted');
     if (!isPushSubscribed) {
-      return; // Don't show notification if user hasn't enabled it
+      return; // Don't show notification if user hasn't enabled it and permission isn't granted
     }
 
     // Show local notification (mimicking backend push notification)
