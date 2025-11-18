@@ -1,25 +1,18 @@
 <svg width="72" height="72" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background -->
-  <rect width="72" height="72" fill="#2563eb"/>
-  
-  <!-- Book emoji as icon -->
-  <text 
-    x="50%" 
-    y="58%" 
-    text-anchor="middle" 
-    dominant-baseline="middle"
-    font-size="36" 
-    fill="white"
-  >📖</text>
-  
-  <!-- Small text "Story" at bottom -->
-  <text 
-    x="50%" 
-    y="85%" 
-    text-anchor="middle" 
-    font-size="8.64" 
-    fill="white"
-    font-family="Arial, sans-serif"
-    font-weight="bold"
-  >STORY</text>
-</svg>
+    <defs>
+      <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#2563eb;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+      </linearGradient>
+    </defs>
+    <!-- Background -->
+    <rect width="72" height="72" fill="url(#grad)"/>
+    <!-- Book icon -->
+    <rect x="14.4" y="14.4" width="43.199999999999996" height="43.199999999999996" rx="5.76" fill="white"/>
+    <rect x="14.4" y="14.4" width="6.4799999999999995" height="43.199999999999996" fill="#e5e7eb"/>
+    <!-- Text lines -->
+    <rect x="25.2" y="25.2" width="21.599999999999998" height="2.16" fill="#2563eb"/>
+    <rect x="25.2" y="32.4" width="21.599999999999998" height="2.16" fill="#2563eb"/>
+    <rect x="25.2" y="39.6" width="21.599999999999998" height="2.16" fill="#2563eb"/>
+    <rect x="25.2" y="46.800000000000004" width="14.4" height="2.16" fill="#2563eb"/>
+  </svg>

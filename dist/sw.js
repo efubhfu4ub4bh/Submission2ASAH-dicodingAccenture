@@ -95,53 +95,56 @@ self.addEventListener('fetch', (event) => {
 
 // Push notification event
 self.addEventListener('push', (event) => {
-  console.log('[SW] Push notification received');
+  console.log('[SW] Service worker pushing...');
   
-  let notificationData = {
-    title: 'Story App',
-    body: 'Ada cerita baru!',
-    icon: '/images/logo-192.png',
-    badge: '/images/logo-72.png',
-    data: {
-      url: '/'
-    }
-  };
-
-  // Parse push data if available
-  if (event.data) {
+  async function chainPromise() {
     try {
-      const data = event.data.json();
-      notificationData = {
-        title: data.title || 'Story App',
-        body: data.body || 'Ada cerita baru!',
-        icon: data.icon || '/images/logo-192.png',
+      // Parse data from push event
+      const data = event.data ? await event.data.json() : null;
+      
+      // Default notification data
+      let title = 'Notifikasi Baru';
+      let options = {
+        body: 'Ada data baru ditambahkan.',
+        icon: '/images/logo-192.png',
         badge: '/images/logo-72.png',
-        image: data.image,
-        data: {
-          url: data.url || '/',
-          storyId: data.storyId
-        },
-        actions: [
-          {
-            action: 'open',
-            title: 'Lihat Cerita'
-          },
-          {
-            action: 'close',
-            title: 'Tutup'
-          }
-        ],
-        requireInteraction: false,
+        data: { url: '/' },
         vibrate: [200, 100, 200]
       };
-    } catch (e) {
-      console.error('[SW] Error parsing push data:', e);
+      
+      // If server sends structured data
+      if (data) {
+        title = data.title || title;
+        options = {
+          body: data.options?.body || data.body || options.body,
+          icon: data.options?.icon || data.icon || options.icon,
+          badge: data.options?.badge || options.badge,
+          image: data.options?.image || data.image,
+          data: {
+            url: data.options?.data?.url || data.url || options.data.url,
+            storyId: data.options?.data?.storyId || data.storyId
+          },
+          actions: data.options?.actions || [
+            { action: 'open', title: 'Lihat Cerita' },
+            { action: 'close', title: 'Tutup' }
+          ],
+          requireInteraction: data.options?.requireInteraction || false,
+          vibrate: data.options?.vibrate || options.vibrate
+        };
+      }
+      
+      await self.registration.showNotification(title, options);
+    } catch (error) {
+      console.error('[SW] Error processing push notification:', error);
+      // Fallback notification
+      await self.registration.showNotification('Notifikasi Baru', {
+        body: 'Ada data baru ditambahkan.',
+        icon: '/images/logo-192.png'
+      });
     }
   }
-
-  event.waitUntil(
-    self.registration.showNotification(notificationData.title, notificationData)
-  );
+  
+  event.waitUntil(chainPromise());
 });
 
 // Notification click event

@@ -1,17 +1,17 @@
 <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background -->
-  <rect width="512" height="512" fill="#2563eb"/>
-  
-  <!-- Safe zone indicator (optional, remove in production) -->
-  <circle cx="256" cy="256" r="204.8" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2" stroke-dasharray="10,5"/>
-  
-  <!-- Book emoji centered in safe zone -->
-  <text 
-    x="50%" 
-    y="50%" 
-    text-anchor="middle" 
-    dominant-baseline="middle"
-    font-size="307.2" 
-    fill="white"
-  >📖</text>
-</svg>
+    <defs>
+      <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#2563eb;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+      </linearGradient>
+    </defs>
+    <!-- Background (full canvas) -->
+    <rect width="512" height="512" fill="url(#grad)"/>
+    <!-- Book icon (in safe zone) -->
+    <rect x="51.2" y="51.2" width="307.20000000000005" height="307.20000000000005" rx="40.96" fill="white" transform="translate(51.2, 51.2)"/>
+    <rect x="51.2" y="51.2" width="45.056000000000004" height="307.20000000000005" fill="#e5e7eb" transform="translate(51.2, 51.2)"/>
+    <!-- Text lines -->
+    <rect x="153.60000000000002" y="153.60000000000002" width="143.35999999999999" height="16.384" fill="#2563eb"/>
+    <rect x="153.60000000000002" y="194.56" width="143.35999999999999" height="16.384" fill="#2563eb"/>
+    <rect x="153.60000000000002" y="235.52000000000004" width="143.35999999999999" height="16.384" fill="#2563eb"/>
+  </svg>
