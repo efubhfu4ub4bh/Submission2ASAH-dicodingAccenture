@@ -327,9 +327,15 @@ export default class HomePage {
       });
     }
 
-    // Check if subscribePush is defined
+    // Dynamically load pwa-integration.js using a script tag
     if (typeof window.subscribePush !== 'function') {
-      console.error('[PWA] subscribePush is not defined. Ensure pwa-integration.js is loaded.');
+      console.warn('[PWA] subscribePush is not defined. Attempting to dynamically load pwa-integration.js.');
+      const script = document.createElement('script');
+      script.src = '/scripts/pwa-integration.js';
+      script.type = 'module';
+      script.onload = () => console.log('[PWA] pwa-integration.js loaded dynamically.');
+      script.onerror = () => console.error('[PWA] Failed to load pwa-integration.js dynamically.');
+      document.head.appendChild(script);
       return;
     }
 
