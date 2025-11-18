@@ -327,12 +327,14 @@ export default class HomePage {
       });
     }
 
-    // Automatically enable notifications
+    // Automatically enable notifications with VAPID key
+    const VAPID_PUBLIC_KEY = 'BCCs2eonMI-6H2ctvFaWg-UYdDv387Vno_bzUzALpB442r2lCnsHmtrx8biyPi_E-1fSGABK_Qs_GlvPoJJqxbk'; // Replace with your actual VAPID key
+
     try {
       const permission = await Notification.requestPermission();
       if (permission === 'granted') {
-        await window.subscribePush();
-        console.log('Notifications are enabled by default.');
+        const subscription = await window.subscribePush(VAPID_PUBLIC_KEY);
+        console.log('Notifications are enabled by default with VAPID key.', subscription);
       } else {
         console.warn('Notification permission was denied.');
       }
@@ -372,6 +374,21 @@ export default class HomePage {
           this._updateConnectionStatus();
         }
       });
+    }
+  }
+
+  async _handleNewStoryNotification(story) {
+    try {
+      const success = await window.IDB?.addStory?.(story);
+
+      if (success) {
+        // Show notification styled like bookmark
+        const message = `Cerita baru "${story.name}" berhasil ditambahkan! 🎉`;
+        this._showNotification(message, 'success');
+      }
+    } catch (error) {
+      console.error('[Story] Failed to add new story:', error);
+      this._showNotification('Gagal menambahkan cerita baru', 'error');
     }
   }
 
