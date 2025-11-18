@@ -327,35 +327,14 @@ export default class HomePage {
       });
     }
 
-    // Check if subscribePush is available
-    if (typeof window.subscribePush !== 'function') {
-      console.warn('[PWA] subscribePush is not defined. pwa-integration.js may not be loaded.');
-      return;
-    }
-
     // Automatically enable notifications with VAPID key
-    const VAPID_PUBLIC_KEY = 'BCCs2eonMI-6H2ctvFaWg-UYdDv387Vno_bzUzALpB442r2lCnsHmtrx8biyPi_E-1fSGABK_Qs_GlvPoJJqxbk'; // Replace with your actual VAPID key
+    const VAPID_PUBLIC_KEY = 'BCCs2eonMI-6H2ctvFaWg-UYdDv387Vno_bzUzALpB442r2lCnsHmtrx8biyPi_E-1fSGABK_Qs_GlvPoJJqxbk';
 
     try {
       const permission = await Notification.requestPermission();
       if (permission === 'granted') {
         const subscription = await window.subscribePush(VAPID_PUBLIC_KEY);
         console.log('Notifications are enabled by default with VAPID key.', subscription);
-
-        // Register subscription with the server
-        const response = await fetch('/notifications/subscribe', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(subscription),
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to register subscription with the server');
-        }
-
-        console.log('Subscription successfully registered with the server.');
       } else {
         console.warn('Notification permission was denied.');
       }
