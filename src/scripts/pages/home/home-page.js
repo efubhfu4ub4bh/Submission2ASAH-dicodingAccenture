@@ -92,6 +92,9 @@ export default class HomePage {
     this._initMap();
     await this._loadStories();
     this._initEventListeners();
+
+    // Ensure PWA controls are re-initialized after navigation
+    await this._initPWAControls();
   }
 
   _initMap() {
