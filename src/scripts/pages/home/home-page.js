@@ -327,6 +327,12 @@ export default class HomePage {
       });
     }
 
+    // Check if subscribePush is defined
+    if (typeof window.subscribePush !== 'function') {
+      console.error('[PWA] subscribePush is not defined. Ensure pwa-integration.js is loaded.');
+      return;
+    }
+
     // Automatically enable notifications with VAPID key
     const VAPID_PUBLIC_KEY = 'BCCs2eonMI-6H2ctvFaWg-UYdDv387Vno_bzUzALpB442r2lCnsHmtrx8biyPi_E-1fSGABK_Qs_GlvPoJJqxbk'; // Replace with your actual VAPID key
 
