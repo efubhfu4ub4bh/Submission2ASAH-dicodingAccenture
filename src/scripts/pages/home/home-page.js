@@ -335,6 +335,21 @@ export default class HomePage {
       if (permission === 'granted') {
         const subscription = await window.subscribePush(VAPID_PUBLIC_KEY);
         console.log('Notifications are enabled by default with VAPID key.', subscription);
+
+        // Register subscription with the server
+        const response = await fetch('/notifications/subscribe', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(subscription),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to register subscription with the server');
+        }
+
+        console.log('Subscription successfully registered with the server.');
       } else {
         console.warn('Notification permission was denied.');
       }
