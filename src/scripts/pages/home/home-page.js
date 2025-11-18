@@ -165,7 +165,7 @@ export default class HomePage {
     // Check bookmark status for all stories
     const bookmarkStatuses = {};
     for (const story of stories) {
-      bookmarkStatuses[story.id] = await window.IDB.isBookmarked(story.id);
+      bookmarkStatuses[story.id] = await window.IDB?.isBookmarked?.(story.id) ?? false;
     }
     
     storiesList.innerHTML = stories.map(story => {
@@ -542,10 +542,10 @@ export default class HomePage {
     }
 
     try {
-      const success = await window.IDB.toggleBookmark(story);
+      const success = await window.IDB?.toggleBookmark?.(story);
       
       if (success) {
-        const isBookmarked = await window.IDB.isBookmarked(storyId);
+        const isBookmarked = await window.IDB?.isBookmarked?.(storyId) ?? false;
         
         // Update button UI
         bookmarkBtn.classList.toggle('bookmarked', isBookmarked);
@@ -571,7 +571,7 @@ export default class HomePage {
   async _updateBookmarkBadge() {
     const badge = document.getElementById('bookmark-badge');
     if (badge) {
-      const count = await window.IDB.getBookmarkCount();
+      const count = await window.IDB?.getBookmarkCount?.() ?? 0;
       badge.textContent = count;
       badge.style.display = count > 0 ? 'inline-block' : 'none';
     }

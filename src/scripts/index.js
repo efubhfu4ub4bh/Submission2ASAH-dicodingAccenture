@@ -3,6 +3,8 @@ import '../styles/styles.css';
 
 import App from './pages/app';
 import ApiService from './data/api';
+// Ensure IDB helper is executed and `window.IDB` is available
+import './idb-helper.js';
 
 function updateNavigation() {
   const authNavItem = document.getElementById('auth-nav-item');
