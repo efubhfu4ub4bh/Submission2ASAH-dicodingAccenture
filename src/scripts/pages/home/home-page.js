@@ -335,11 +335,14 @@ export default class HomePage {
     // Notification toggle
     const notificationToggle = document.getElementById('notification-toggle');
     if (notificationToggle && window.checkNotificationPermission) {
-      // Set initial state
-      // Consider the user subscribed if either there's an active push subscription
-      // or the Notification permission is already granted (local notifications possible)
-      const isSubscribed = await window.isPushSubscribed?.() || (Notification.permission === 'granted');
-      notificationToggle.checked = !!isSubscribed;
+      // Set initial state from local storage
+      const savedState = localStorage.getItem('notification-toggle-state');
+      if (savedState !== null) {
+        notificationToggle.checked = savedState === 'true';
+      } else {
+        const isSubscribed = await window.isPushSubscribed?.() || (Notification.permission === 'granted');
+        notificationToggle.checked = !!isSubscribed;
+      }
 
       notificationToggle.addEventListener('change', async (e) => {
         try {
@@ -348,7 +351,8 @@ export default class HomePage {
             const permission = await Notification.requestPermission();
             if (permission === 'granted') {
               const result = await window.subscribePush();
-              
+              localStorage.setItem('notification-toggle-state', 'true'); // Persist state
+
               // Check if notification-only mode
               if (result?.backendData?.mode === 'notification-only') {
                 this._showNotification('Notifikasi diaktifkan (mode lokal) 🔔', 'success');
@@ -362,12 +366,13 @@ export default class HomePage {
           } else {
             // Unsubscribe
             await window.unsubscribePush();
+            localStorage.setItem('notification-toggle-state', 'false'); // Persist state
             this._showNotification('Notifikasi dinonaktifkan', 'info');
           }
         } catch (error) {
           console.error('[PWA] Notification toggle error:', error);
           e.target.checked = !e.target.checked;
-          
+
           // More specific error messages
           let errorMessage = 'Gagal mengubah pengaturan notifikasi';
           if (error.message.includes('login')) {
@@ -375,7 +380,7 @@ export default class HomePage {
           } else if (error.message.includes('server')) {
             errorMessage = 'Gagal terhubung ke server';
           }
-          
+
           this._showNotification(errorMessage, 'error');
         }
       });
@@ -392,7 +397,7 @@ export default class HomePage {
       syncButton.addEventListener('click', async () => {
         syncButton.disabled = true;
         syncButton.innerHTML = '<span aria-hidden="true">⏳</span> Menyinkronkan...';
-        
+
         try {
           const result = await window.syncOfflineStories();
           if (result.success > 0) {
